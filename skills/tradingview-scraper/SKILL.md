@@ -1,113 +1,70 @@
 ---
 name: "tradingview-scraper"
-description: "Unified gold analysis with HTML table formatting for Telegram Rich Messages"
+description: "TradingView scraper with real-time price fetch"
 ---
 
-# TradingView Scraper + SMC Unified Skill (v2)
+# SKILL: tradingview-scraper
 
-Advanced gold analysis combining **7 timeframe data sources**, **Smart Money Concepts**, **TradingView technicals**, **fundamental data**, and **news sentiment**.
+## Description
+Fetches real-time gold price from TradingView using Playwright browser automation and generates comprehensive technical analysis.
 
-## What's New in v2
+## Price Data Policy
 
-- ✅ **Multi-timeframe**: D1, H4, H1, M30, M15, M5, M1
-- ✅ **Deriv API**: Real-time price from Deriv.com
-- ✅ **Unified Report**: All analysis in 1 script
-- ✅ **Auto-fallback**: Deriv → yfinance → gold-monitor
-- ✅ **HTML Table Formatting**: Clean table display for Telegram Rich Messages
+**Real-time price is fetched ON-DEMAND only** - never auto-fetch in background.
 
-## Components
+When user requests:
+- **Analysis** (analisis, analysis, technical)
+- **Trading signals** (signal, sinyal, buy, sell)
+- **Price check** (harga, price, berapa)
+- **Area setup** (setup, area, entry, zone)
+- **Any trading-related request**
 
-| Script | Purpose |
-|--------|---------|
-| `gold_master_analysis.py` | **Main** — Complete unified report |
-| `deriv_connector.py` | Deriv API connector |
-| `tv_scrape.py` | TradingView technicals |
-| `smc_analyzer.py` | SMC patterns |
-
-## Features
-
-1. **Multi-Timeframe Price** (7 TF): Deriv API + yfinance fallback
-2. **TradingView Technicals**: 11+ oscillators, 15+ MAs, pivot levels
-3. **SMC**: Structure, Liquidity, FVG, S/R, candlestick patterns
-4. **HTML Table Formatting**: Clean table display for Telegram Rich Messages
-
-## Setup
-
+**ALWAYS fetch real-time price first** using:
 ```bash
-pip3 install playwright yfinance websockets
-python3 -m playwright install chromium
+cd ~/.openclaw/workspace && python3 tradingview_cron.py
 ```
 
-Optional Deriv token:
+Then read the price:
 ```bash
-echo "YOUR_DERIV_TOKEN" > ~/.deriv_api_token
+cat ~/.openclaw/workspace/current_price.json
 ```
 
-## Usage
+**Never** use cached/stale price for trading analysis.
 
-```bash
-# Complete analysis
-python3 scripts/gold_master_analysis.py
+## Scripts
 
-# JSON output
-python3 scripts/gold_master_analysis.py --json
+### tradingview_cron.py
+- Fetches real-time XAUUSD from TradingView Pepperstone
+- Uses Playwright headless browser
+- Saves to current_price.json
 
-# Individual components
-python3 scripts/deriv_connector.py --symbol frxXAUUSD
-python3 scripts/tv_scrape.py --symbol XAUUSD
-python3 scripts/smc_analyzer.py
-```
+### gold_master_analysis.py
+- Multi-timeframe analysis (1m, 5m, 15m, 30m, 1h, 4h, 1d)
+- Fundamental data (Fed, CPI, DXY, COT)
+- News sentiment analysis
+- Smart Money Concepts (SMC)
+- TradingView technicals
 
 ## Output Format
+- HTML tables with `|:---|:---|` alignment
+- Bold for key values and signals
+- Emoji headers for sections
+- Never ASCII art tables
 
-When `richMessages: true` is enabled in Telegram config, the script automatically outputs HTML tables for clean display:
+## Area Setup Generation
+When user asks "Area setup", automatically:
+1. Fetch real-time price
+2. Get technical levels (support/resistance)
+3. Generate:
+   - Entry zones
+   - Stop loss
+   - Take profit targets
+   - Risk:Reward ratios
 
-### Example HTML Table Format:
-```html
-<h3>💰 MULTI-TIMEFRAME PRICE DATA</h3>
-| Timeframe | Open | High | Low | Close | Source |
-|:---|:---|:---|:---|:---|:---|
-| **1d** | $4,014.68 | $4,095.97 | $3,983.17 | **$4,081.45** | Deriv API |
-```
+## Files
+- `~/.openclaw/workspace/tradingview_cron.py`
+- `~/.openclaw/workspace/tradingview_realtime.py`
+- `~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py`
 
-### Key Formatting Rules:
-- Use `|:---|:---|` for left-aligned columns
-- Use `**bold**` for important values
-- Keep columns minimal (max 6 columns per table)
-- Use emoji headers for visual distinction
-
-## Verdict Logic
-
-| TV | SMC | News | Result |
-|----|-----|------|--------|
-| SELL | Short | Bearish | 🔴 Strong Sell |
-| BUY | Long | Bullish | 🟢 Strong Buy |
-| SELL | Mixed | Bearish | 🟠 Sell |
-| BUY | Mixed | Bearish | 🟡 Buy |
-| NEUTRAL | Any | Mixed | ⚪ Neutral |
-
-## Data Sources
-
-| Source | Data | Delay |
-|--------|------|-------|
-| Deriv API | Real-time ticks | ~0ms |
-| yfinance | COMEX futures | ~15min |
-| TradingView | Technicals | Real-time scrape |
-| FRED | Macro | Daily |
-| CFTC | COT | Weekly |
-| SSGA | ETF | Daily |
-| News RSS | Headlines | Real-time |
-
-## Notes
-
-- Deriv API: token required for full access
-- TV scraping: headless Chromium, ~10-15s
-- Weekend: XAUUSD closed, use OTC_Gold
-- For analysis, not direct trading
-
-## Credits
-
-- SMC: Kiran Kumbar XAU/USD Signal Bot
-- TV scraping: Playwright
-- Deriv: Binary.com/Deriv.com API
-- Data: FRED, CFTC, SSGA, Google/Bing News
+## Version
+2.1.1
