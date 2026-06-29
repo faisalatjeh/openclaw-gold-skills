@@ -1,0 +1,56 @@
+{
+  "repository": "openclaw-gold-skills",
+  "version": "2.2.1",
+  "last_updated": "2026-06-28T21:54:00",
+  "timezone": "Asia/Jakarta",
+  "cron_jobs": [
+    {
+      "id": "44f1c9ab-d45f-45aa-a0ab-5af8c4dd928b",
+      "name": "xauusd-pre-events",
+      "enabled": true,
+      "schedule": "0 0 * * *",
+      "description": "Pre-market events and calendar",
+      "next_run": "2026-06-29T00:00:00"
+    },
+    {
+      "id": "c2f324d4-71f8-4c84-ac00-261c1ca5e9a8",
+      "name": "xauusd-daily-analysis",
+      "enabled": true,
+      "schedule": "0 6 * * *",
+      "description": "Daily market analysis",
+      "next_run": "2026-06-29T06:00:00"
+    },
+    {
+      "id": "8b847b8a-5f51-4917-afb3-26f9780e4247",
+      "name": "xauusd-evening-update",
+      "enabled": true,
+      "schedule": "0 15 * * *",
+      "description": "Evening market update",
+      "next_run": "2026-06-29T15:00:00"
+    },
+    {
+      "id": "f44fd1a7-fede-4f8a-b1fd-c84f925909a3",
+      "name": "xauusd-weekly-outlook",
+      "enabled": true,
+      "schedule": "0 18 * * 0",
+      "description": "Weekly market outlook",
+      "next_run": "2026-07-05T18:00:00"
+    }
+  ],
+  "entry_monitor": {
+    "status": "ON-DEMAND",
+    "description": "Only activated when user explicitly requests",
+    "activation": "User says 'Saya ada entry' or provides entry details",
+    "deactivation": "User says 'Close entry' or 'Stop monitor'",
+    "scripts": [
+      "entry_monitor_v2.py",
+      "entry_monitor_smart.py"
+    ]
+  },
+  "notes": [
+    "Entry monitor is NOT auto-running by default",
+    "User must explicitly request monitor activation",
+    "Monitor runs every 2 minutes when active",
+    "User prefers original style (alert every 2 minutes)"
+  ]
+}

@@ -1,98 +1,63 @@
 # Cron Jobs Setup
 
-## Auto-Analysis Schedule
+## Scheduled Reports (Always Active)
 
-Add these to your crontab (`crontab -e`):
+| Job | ID | Schedule | Description |
+|:---|:---|:---|:---|
+| xauusd-pre-events | `44f1c9ab-d45f-45aa-a0ab-5af8c4dd928b` | 12:00 AM | Pre-market events |
+| xauusd-daily-analysis | `c2f324d4-71f8-4c84-ac00-261c1ca5e9a8` | 06:00 AM | Daily analysis |
+| xauusd-evening-update | `8b847b8a-5f51-4917-afb3-26f9780e4247` | 03:00 PM | Evening update |
+| xauusd-weekly-outlook | `f44fd1a7-fede-4f8a-b1fd-c84f925909a3` | Sunday 18:00 | Weekly outlook |
 
-### Daily Analysis (08:00 ET)
-```cron
-0 8 * * * /usr/bin/python3 ~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py --json > /tmp/xauusd_daily.json 2>&1
-```
+## Entry Monitor (On-Demand)
 
-### Evening Update (17:00 ET, Weekdays)
-```cron
-0 17 * * 1-5 /usr/bin/python3 ~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py --json > /tmp/xauusd_evening.json 2>&1
-```
-
-### Pre-Market Events (07:00 ET, Weekdays)
-```cron
-0 7 * * 1-5 /usr/bin/python3 ~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py --json > /tmp/xauusd_events.json 2>&1
-```
-
-### Weekly Outlook (Friday 18:00 ET)
-```cron
-0 18 * * 5 /usr/bin/python3 ~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py --json > /tmp/xauusd_weekly.json 2>&1
-```
-
-## OpenClaw Cron Jobs (Recommended)
-
-Use OpenClaw built-in cron for better integration:
-
+### Activation
 ```bash
-# Add via OpenClaw CLI
-openclaw cron add --name "xauusd-daily" --schedule "0 8 * * *" --command "analisa xauusd"
+# User says: "Saya ada entry SELL $4,064 SL $4,080"
+# System creates active_entry.json
+# System asks: "Mau di-monitor?"
+# User says: "Ya, setiap 2 menit"
 ```
 
-Or use the API directly (see main repository).
-
-## Event Alerts
-
-### High Impact Events
-```cron
-# Check 1 hour before major events
-0 7,9 * * 1-5 /usr/bin/python3 ~/.openclaw/workspace/skills/tradingview-scraper/scripts/fundamentals.py --events-only
-```
-
-### Price Alerts
-```cron
-# Check price every 15 minutes during market hours
-*/15 6-17 * * 1-5 /usr/bin/python3 ~/.openclaw/workspace/skills/tradingview-scraper/scripts/price_alert.py --symbol XAUUSD
-```
-
-## Log Files
-
-All outputs saved to `/tmp/`:
-- `xauusd_daily.json` - Daily analysis
-- `xauusd_evening.json` - Evening update
-- `xauusd_events.json` - Pre-market events
-- `xauusd_weekly.json` - Weekly outlook
-
-## Monitoring
-
-Check cron job status:
+### Cron Expression
 ```bash
-# List all cron jobs
-crontab -l
-
-# Check recent runs
-tail -f /var/log/cron.log
-
-# View latest analysis
-cat /tmp/xauusd_daily.json | python3 -m json.tool
+*/2 * * * * cd ~/.openclaw/workspace && python3 tradingview_cron.py && python3 entry_monitor_v2.py
 ```
 
-## Troubleshooting
-
-| Issue | Solution |
-|:---|:---|
-| Cron not running | Check `crontab -l` for correct paths |
-| Permission denied | Make scripts executable: `chmod +x *.py` |
-| Output empty | Check Python path: `which python3` |
-| Wrong timezone | Set TZ variable: `TZ=America/New_York` |
-
-## Customization
-
-### Modify Schedule
-Edit timing in crontab entries above.
-
-### Add More Symbols
-Duplicate scripts and change symbol parameter:
+### Deactivation
 ```bash
-python3 gold_master_analysis.py --symbol frxEURUSD
+# User says: "Close entry" or "Stop monitor"
+# System removes cron job
 ```
 
-### Integration with Notifications
-Add webhook or Telegram notification:
+## Setup Commands
+
+### Create Scheduled Reports
 ```bash
-python3 gold_master_analysis.py --json | python3 send_telegram.py
+# Pre-events
+cron add --name xauusd-pre-events --schedule "0 0 * * *" --script "xauusd_pre_events.py"
+
+# Daily analysis
+cron add --name xauusd-daily-analysis --schedule "0 6 * * *" --script "xauusd_daily_analysis.py"
+
+# Evening update
+cron add --name xauusd-evening-update --schedule "0 15 * * *" --script "xauusd_evening_update.py"
+
+# Weekly outlook
+cron add --name xauusd-weekly-outlook --schedule "0 18 * * 0" --script "xauusd_weekly_outlook.py"
+```
+
+### Create Entry Monitor (On-Demand)
+```bash
+# Only when user requests
+cron add --name entry-monitor --schedule "*/2 * * * *" --script "entry_monitor_v2.py"
+```
+
+## Timezone
+All cron jobs use: **Asia/Jakarta** (WIB)
+
+## Status
+Check status:
+```bash
+cron list
 ```
