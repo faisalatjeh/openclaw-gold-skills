@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "aigc-news-sentiment",
+  "installedVersion": "1.0.0",
+  "installedAt": 1782602635571,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "9e59e8e4da739c34a5e40e8fb1864b37ef6d1c2aa9ba5a61055181a451bace31",
+    "integrity": "sha256-nlno5NpznDSl5A6PsYZLN+9tHCqpulphBVGBpFG6zjE="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "c6d1614561b5bcc61d929adafca43ae4e9ba1483da7ff15f728be988555a43d2"
+  }
+}

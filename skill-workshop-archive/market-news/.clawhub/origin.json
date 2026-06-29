@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "market-news",
+  "installedVersion": "1.0.0",
+  "installedAt": 1782602622303,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "b0f8cc515f7216eeb66984841f7c5804a50f8547a5f9dfe9eeed02f3131f1821",
+    "integrity": "sha256-sPjMUV9yFu62aYSEH3xYBKUPhUel+d/p7u0C8xMfGCE="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "568bc5ec664e03a522f911a25c1c2968f46e068ab6000c6544048b57812eb02d"
+  }
+}

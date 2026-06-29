@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "xauusd-analyzer",
+  "installedVersion": "1.0.0",
+  "installedAt": 1782600041741,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "27f228279a4be584c3d395a3923c86909710590bf60c5e33237ed323604fdd9a",
+    "integrity": "sha256-J/IoJ5pL5YTD05WjkjyGkJcQWQv2DF4zI37TI2BP3Zo="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "c0f632147dc000f02819883af7f2c73134615d9a08dac2775a421db58b21f6b8"
+  }
+}

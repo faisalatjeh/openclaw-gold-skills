@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "gold-analysis",
+  "installedVersion": "1.0.3",
+  "installedAt": 1782601526337,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "878070ad78312d763dc005b1c5ca25fb99641b1eb32e8b174e39c55508ff8034",
+    "integrity": "sha256-h4BwrXgxLXY9wAWxxcol+5lkGx6zLosXTjnFVQj/gDQ="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "0e8dbc5bf2e549693f31aafa1828233af24c95de29cb46bb7bf7f8dd3bdd953e"
+  }
+}

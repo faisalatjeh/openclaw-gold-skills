@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "gold-news-sentiment",
+  "installedVersion": "1.0.0",
+  "installedAt": 1782601424126,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "1496e6700be4398470bcb1fd06b95b454ac6636ec24e0aec20da588ad49aae15",
+    "integrity": "sha256-FJbmcAvkOYRwvLH9BrlbRUrGY27CTgrsINpYitSarhU="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "c013d93c783d9b3b51e37c33a5287483bae6f2331e5d86639a8de2a8ff9f4e38"
+  }
+}

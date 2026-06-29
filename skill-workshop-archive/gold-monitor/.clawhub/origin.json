@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "gold-monitor",
+  "installedVersion": "2.2.0",
+  "installedAt": 1782600327151,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "fa907c42082a0f32337f4d7dc2ebd0a669f5f0a104943f154fe8b8baa35943dc",
+    "integrity": "sha256-+pB8QggqDzIzf019wuvQpmn18KEElD8VT+i4uqNZQ9w="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "508ca1501db57212c9ca2db3dbd187024b8b36676f70c4fa1e78b57b8a54d80e"
+  }
+}

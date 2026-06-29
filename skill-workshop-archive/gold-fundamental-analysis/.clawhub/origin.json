@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "gold-fundamental-analysis",
+  "installedVersion": "1.0.0",
+  "installedAt": 1782601379035,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "57b9c773552165e207c187fa8e7de17e472aec171ae058d325f38a20efb34bd5",
+    "integrity": "sha256-V7nHc1UhZeIHwYf6jn3hfkcq7Bca4FjTJfOKIO+zS9U="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "cddc62bc9cf41d9751dbd705e2c0919667c6d05246a8a62ae7953332ea44235c"
+  }
+}

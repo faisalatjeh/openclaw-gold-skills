@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "signalbot",
+  "installedVersion": "1.1.0",
+  "installedAt": 1782600298300,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "44449e80ca8798d871f3968b2e010115d0d6c5ea023eb81fb80ca80eafbd2d53",
+    "integrity": "sha256-RESegMqHmNhx85aLLgEBFdDWxeoCPrgfuAyoDq+9LVM="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "98ee7d367a42f804e5cc235f171efb5b1611288fe5bf8954b5f558ce7e1b6d96"
+  }
+}
