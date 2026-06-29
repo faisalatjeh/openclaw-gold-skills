@@ -1,12 +1,3 @@
----
-name: "gold-analysis"
-description: "Gold analysis with integrated entry monitor and market analysis"
-metadata:
-  version: 1.0.0
-  author: FMouse
-  tags: gold, trading, analysis, finance
----
-
 # SKILL: gold-analysis
 
 ## Description
@@ -58,118 +49,54 @@ cat ~/.openclaw/workspace/current_price.json
 - User says: "Close entry", "Stop monitor", "Tidak ada entry lagi"
 - System removes cron job and deletes `active_entry.json`
 
-## Integrated Monitor + Analysis
+## Smart Monitor (Anti-Spam)
 
-### Monitor Includes Market Analysis:
-When monitoring entry, system also checks:
+### Rules:
+- **Alert hanya jika** ada perubahan signifikan
+- **Silent** jika price stagnan
 
-1. **Price vs Entry** (P&L calculation)
-2. **Technical Levels** (TP1, TP2, TP3, SL distance)
-3. **Trend Analysis** (Berubah atau tidak?)
-4. **Fundamental Check** (DXY, News, Events)
-5. **Smart Money Concepts** (Structure analysis)
-6. **Action Recommendation** (HOLD/CLOSE/MOVE SL)
+| Kondisi | Alert? | Alasan |
+|:---|:---|:---|
+| Price berubah ≥ $2 | ✅ YES | Significant movement |
+| Action berubah (TP/SL) | ✅ YES | Trigger reached |
+| 30 menit tanpa alert | ✅ YES | Summary |
+| Price stagnan | ❌ NO | Skip (anti-spam) |
 
-### Output Format (Monitor + Analysis):
-
+### Output:
 ```
 📊 ENTRY MONITOR — XAUUSD SELL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 Entry: SELL $4,070.00
-📍 Current: $4,053.35
-💰 P&L: +$16.65 (Profit)
+🎯 Entry: SELL $4,064.00
+📍 Current: $4,060.80
+💰 P&L: +$3.20 (Profit)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ⚡ ACTION: HOLD PROFIT ✅
-📝 Running profit $16.65 — Hold ke TP
+📝 Running profit $3.20 — Hold ke TP
 
 🎯 TARGETS:
-• TP1: $4,040.00 (±$13)
-• TP2: $4,010.00 (±$43)
-• TP3: $3,990.00 (±$63)
+• TP1: $4,045.00
+• TP2: $4,020.00
+• TP3: $4,000.00
 
-🛑 STOP LOSS: $4,085.00 (±$31)
+🛑 STOP LOSS: $4,080.00
 
 📊 MARKET ANALYSIS:
-• Trend: Bearish (sesuai entry) ✅
-• DXY: 120.40 (Naik — konfirmasi bearish) ✅
-• News: Hormuz risk (support gold) ⚠️
-• SMC Structure: BULLISH on H1 ⚠️
+• Trend: Bearish
+• DXY: 120.4
+• SMC Structure: Bullish on H1
+• Reversal Risk: LOW ✅
 
-⚠️ REVERSAL RISK: LOW-MEDIUM
-
-💡 SARAN: 
-• Hold ke TP1 ($4,040)
-• Tapi hati-hati: SMC H1 bullish
-• Pertimbangkan trailing stop ke $4,060
-• Kalau break $4,065 → CLOSE DINI
-
-⏰ Next Check: 1 menit
+💡 SARAN: Hold ke target
+⏰ Update: 20:04:48
 ```
-
-### Auto-Actions with Analysis:
-
-| Kondisi | Action | Analisis Check |
-|:---|:---|:---|
-| Price ≥ TP1 | CLOSE 50% | Cek trend masih valid? |
-| Price ≥ TP2 | CLOSE 100% atau MOVE SL | Reversal signal? |
-| Price ≥ TP3 | CLOSE 100% | Trend masih kuat? |
-| Price dekat SL | WARNING | SL masih valid? Support broken? |
-| Trend berubah | REVERSAL ALERT | Close dini atau pindah SL! |
-| News high impact | PAUSE | Jangan entry baru, monitor SL |
-
-## Output Formatting
-
-**For Telegram (primary channel):**
-- Always use **HTML table format** with `|:---|:---|` alignment
-- Use `**bold**` for important values, prices, signals
-- Use emoji headers (## 📊) for sections
-- **NEVER use ASCII art** tables (+, -, dashed lines)
-- Keep tables minimalis and clean
-- All structured data MUST be in tables
-
-## Procedure
-
-### Step 1: Fetch Real-time Price
-```bash
-cd ~/.openclaw/workspace && python3 tradingview_cron.py
-```
-
-### Step 2: Read Price Data
-```bash
-cat ~/.openclaw/workspace/current_price.json
-```
-
-### Step 3: Execute Analysis
-```bash
-cd ~/.openclaw/workspace && python3 skills/tradingview-scraper/scripts/gold_master_analysis.py
-```
-
-### Step 4: Generate Area Setup
-Based on real-time price + technical levels:
-- Entry zones
-- Stop loss
-- Take profit targets
-- Risk:Reward ratio
-
-### Step 5: Monitor Entry (ONLY if user has active entry)
-```bash
-cd ~/.openclaw/workspace && python3 entry_monitor.py
-```
-
-### Step 6: Integrated Analysis (if monitor active)
-- Fetch technical analysis
-- Check SMC structure
-- Review fundamental data
-- Compare with entry direction
-- Generate reversal alerts if needed
 
 ## Files
 - `~/.openclaw/workspace/tradingview_cron.py` - Real-time price fetcher
-- `~/.openclaw/workspace/entry_monitor.py` - Entry monitor + integrated analysis
+- `~/.openclaw/workspace/entry_monitor_smart.py` - Smart entry monitor (anti-spam)
 - `~/.openclaw/workspace/active_entry.json` - Active entry config (created per request)
 - `~/.openclaw/workspace/entry_status.json` - Monitor status output
 - `~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py` - Full analysis
 
 ## Version
-1.4.0
+1.5.0
