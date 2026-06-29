@@ -1,65 +1,72 @@
 # 🥇 OpenClaw Gold Skills
 
-Real-time XAUUSD (Gold) analysis system for OpenClaw with clean HTML-table formatting for Telegram.
+Complete XAUUSD (Gold) analysis system for OpenClaw with real-time price, technical analysis, and entry monitoring.
 
 ## ✨ Features
 
-- **Real-time price** from TradingView (on-demand fetch)
+- **Real-time price** from TradingView (on-demand)
 - **Multi-timeframe analysis** (1m, 5m, 15m, 30m, 1h, 4h, 1d)
 - **Fundamental analysis** (Fed, CPI, DXY, COT, ETF)
 - **News sentiment** analysis
 - **Smart Money Concepts** (SMC)
-- **Area setup** generation (entry/stop/target)
+- **Entry monitoring** with auto-action alerts
 - **HTML table formatting** for Telegram
 
-## 🚀 Quick Start
+## 📁 Files
 
-### 1. Price Fetch (On-Demand)
-```bash
-# Fetch real-time price from TradingView
-python3 tradingview_cron.py
-
-# Read the price
-cat current_price.json
-```
-
-### 2. Full Analysis
-```bash
-# Generate comprehensive analysis
-cd ~/.openclaw/workspace && python3 skills/tradingview-scraper/scripts/gold_master_analysis.py
-```
-
-### 3. Area Setup
-Automatically generated when you request "Area setup" - includes:
-- Entry zones
-- Stop loss
-- Take profit targets
-- Risk:Reward ratios
+| File | Description |
+|:---|:---|
+| `tradingview_cron.py` | Real-time price fetcher |
+| `tradingview_realtime.py` | Manual price fetcher |
+| `entry_monitor_v2.py` | Entry monitor (original style) |
+| `entry_monitor_smart.py` | Smart monitor (anti-spam) |
+| `SOUL.md` | Agent personality & policies |
+| `current_price.json` | Latest price data |
 
 ## 📁 Skills
 
 | Skill | Version | Description |
 |:---|:---|:---|
-| [gold-analysis](skills/gold-analysis/) | v1.2.1 | Fundamental analysis |
-| [tradingview-scraper](skills/tradingview-scraper/) | v2.1.1 | Real-time price + technicals |
-| [telegram-formatting-guide](skills/telegram-formatting-guide/) | v1.1.1 | HTML table formatting |
+| [gold-analysis](skills/gold-analysis/) | v1.5.1 | Fundamental + entry monitor |
+| [tradingview-scraper](skills/tradingview-scraper/) | v2.2.1 | Real-time price + technicals |
+| [telegram-formatting-guide](skills/telegram-formatting-guide/) | v1.2.0 | HTML table formatting |
 
-## 📋 Price Policy
+## 📋 Cron Jobs
 
-**ON-DEMAND ONLY** - Never auto-fetch in background.
+| Job | Schedule | Description |
+|:---|:---|:---|
+| entry-monitor-4064 | Every 2 minutes | Active entry monitor |
+| xauusd-daily-analysis | 06:00 AM | Daily market analysis |
+| xauusd-evening-update | 03:00 PM | Evening update |
+| xauusd-pre-events | 12:00 AM | Pre-market events |
+| xauusd-weekly-outlook | Sunday 18:00 | Weekly outlook |
 
-When you request any trading analysis:
-1. System fetches real-time price from TradingView
-2. Uses that price for analysis
-3. Never uses cached/stale data
+## 🚀 Quick Start
 
-## 🛠️ Installation
+### Fetch Real-time Price
+```bash
+python3 tradingview_cron.py
+```
 
-See [docs/INSTALL.md](docs/INSTALL.md)
+### Run Analysis
+```bash
+python3 skills/tradingview-scraper/scripts/gold_master_analysis.py
+```
 
-## 📖 Usage
+### Monitor Entry
+```bash
+# Create entry config
+echo '{"symbol":"XAUUSD","direction":"SELL","entry_price":4064,"stop_loss":4080,"take_profit_1":4045}' > active_entry.json
 
-See [docs/USAGE.md](docs/USAGE.md)
+# Run monitor
+python3 entry_monitor_v2.py
+```
+
+## 📖 Documentation
+
+- [Installation](docs/INSTALL.md)
+- [Usage](docs/USAGE.md)
+- [Examples](examples/)
 
 ## 📄 License
 
