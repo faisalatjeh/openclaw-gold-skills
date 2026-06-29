@@ -1,7 +1,12 @@
-# SKILL: gold-analysis
+---
+name: "gold-analysis-v2"
+description: "Gold analysis with original entry monitor style (alert every 2 minutes)"
+---
+
+# SKILL: gold-analysis-v2
 
 ## Description
-Fetches and analyzes gold fundamental data from FRED, CFTC, SPDR ETF, and Fed RSS. Returns structured JSON with macro indicators, COT positioning, ETF holdings, Fed stance, upcoming events, and INTEGRATED ENTRY MONITORING with market analysis.
+Fetches and analyzes gold fundamental data from FRED, CFTC, SPDR ETF, and Fed RSS. Returns structured JSON with macro indicators, COT positioning, ETF holdings, Fed stance, upcoming events, and ENTRY MONITORING with ORIGINAL style (alert every 2 minutes).
 
 ## Price Data Policy
 
@@ -49,54 +54,46 @@ cat ~/.openclaw/workspace/current_price.json
 - User says: "Close entry", "Stop monitor", "Tidak ada entry lagi"
 - System removes cron job and deletes `active_entry.json`
 
-## Smart Monitor (Anti-Spam)
+## Monitor Style: ORIGINAL (Alert Every 2 Minutes)
 
-### Rules:
-- **Alert hanya jika** ada perubahan signifikan
-- **Silent** jika price stagnan
+### User Preference:
+User prefers **original monitor style** that sends full report every 2 minutes regardless of price change.
 
-| Kondisi | Alert? | Alasan |
-|:---|:---|:---|
-| Price berubah ≥ $2 | ✅ YES | Significant movement |
-| Action berubah (TP/SL) | ✅ YES | Trigger reached |
-| 30 menit tanpa alert | ✅ YES | Summary |
-| Price stagnan | ❌ NO | Skip (anti-spam) |
-
-### Output:
+### Output Format:
 ```
 📊 ENTRY MONITOR — XAUUSD SELL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎯 Entry: SELL $4,064.00
 📍 Current: $4,060.80
 💰 P&L: +$3.20 (Profit)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ⚡ ACTION: HOLD PROFIT ✅
 📝 Running profit $3.20 — Hold ke TP
 
 🎯 TARGETS:
-• TP1: $4,045.00
-• TP2: $4,020.00
-• TP3: $4,000.00
+• TP1: $4,045.00 (±$16 dari sekarang)
+• TP2: $4,020.00 (±$41 dari sekarang)
+• TP3: $4,000.00 (±$61 dari sekarang)
 
-🛑 STOP LOSS: $4,080.00
+🛑 STOP LOSS: $4,080.00 (±$19)
 
 📊 MARKET ANALYSIS:
 • Trend: Bearish
 • DXY: 120.4
-• SMC Structure: Bullish on H1
+• SMC Structure: Bullish on H1 ⚠️
 • Reversal Risk: LOW ✅
 
-💡 SARAN: Hold ke target
-⏰ Update: 20:04:48
+💡 SARAN: 💰 Bagus! Hold ke target atau pasang trailing stop. SMC: Bullish on H1
+🔄 Next Check: 2 menit
 ```
 
 ## Files
 - `~/.openclaw/workspace/tradingview_cron.py` - Real-time price fetcher
-- `~/.openclaw/workspace/entry_monitor_smart.py` - Smart entry monitor (anti-spam)
+- `~/.openclaw/workspace/entry_monitor_v2.py` - Entry monitor (original style)
 - `~/.openclaw/workspace/active_entry.json` - Active entry config (created per request)
 - `~/.openclaw/workspace/entry_status.json` - Monitor status output
 - `~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py` - Full analysis
 
 ## Version
-1.5.0
+1.5.1
