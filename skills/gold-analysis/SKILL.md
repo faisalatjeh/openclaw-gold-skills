@@ -1,6 +1,6 @@
 ---
 name: "gold-analysis"
-description: "Gold fundamental analysis with entry monitor and real-time price"
+description: "Gold analysis with on-demand entry monitoring"
 metadata:
   version: 1.0.0
   author: FMouse
@@ -10,7 +10,7 @@ metadata:
 # SKILL: gold-analysis
 
 ## Description
-Fetches and analyzes gold fundamental data from FRED, CFTC, SPDR ETF, and Fed RSS. Returns structured JSON with macro indicators, COT positioning, ETF holdings, Fed stance, upcoming events, and ENTRY MONITORING.
+Fetches and analyzes gold fundamental data from FRED, CFTC, SPDR ETF, and Fed RSS. Returns structured JSON with macro indicators, COT positioning, ETF holdings, Fed stance, and upcoming events.
 
 ## Price Data Policy
 
@@ -21,7 +21,6 @@ When user requests:
 - **Trading signals** (signal, sinyal, buy, sell)
 - **Price check** (harga, price, berapa)
 - **Area setup** (setup, area, entry, zone)
-- **Entry monitor** (monitor, pantau, entry, posisi)
 - **Any trading-related request**
 
 **ALWAYS fetch real-time price first** using:
@@ -36,62 +35,38 @@ cat ~/.openclaw/workspace/current_price.json
 
 **Never** use cached/stale price for trading analysis.
 
-## Entry Monitor Feature
+## Entry Monitor Policy
 
-### Setup Entry Monitoring
-When user provides entry details, create monitor file:
+**Entry monitor is ON-DEMAND only** - never auto-run in background.
 
-```bash
-cat > ~/.openclaw/workspace/active_entry.json << 'EOF'
-{
-  "symbol": "XAUUSD",
-  "direction": "SELL",
-  "entry_price": 4070.00,
-  "stop_loss": 4085.00,
-  "take_profit_1": 4040.00,
-  "take_profit_2": 4010.00,
-  "take_profit_3": 3990.00,
-  "position_size": "1 lot",
-  "created_at": "2026-06-28T20:00:00",
-  "status": "ACTIVE"
-}
-EOF
-```
+### When to Activate Monitor:
+- User explicitly says: "Saya ada entry", "Entry saya", "Monitor entry", "Saya dalam posisi"
+- User provides entry details: "Entry SELL $4,070"
 
-### Auto-Actions Rules:
+### When NOT to Activate:
+- User does NOT mention having an entry
+- Default state: NO MONITORING
 
-| Kondisi | Action | Deskripsi |
-|:---|:---|:---|
-| Price ≥ TP1 | CLOSE 50% | Close separuh posisi |
-| Price ≥ TP2 | CLOSE 100% atau MOVE SL | Full close atau trail |
-| Price ≥ TP3 | CLOSE 100% | Target tercapai |
-| Price mendekati SL (90%) | WARNING | Alert cut loss |
-| Price di entry ±$2 | BREAKEVEN | Pindah SL ke entry |
-| Price dalam range 50% | HOLD | Tunggu development |
+### How to Activate:
+1. User says: "Saya ada entry SELL $4,070 SL $4,085"
+2. System creates `active_entry.json`
+3. System asks: "Mau di-monitor otomatis setiap 1 menit?"
+4. If user says YES → Create cron job
+5. If user says NO → Manual check only (user asks "Status entry?")
 
-### Monitor Output Format:
+### How to Deactivate:
+- User says: "Close entry", "Stop monitor", "Tidak ada entry lagi"
+- System removes cron job and deletes `active_entry.json`
 
-```
-📊 ENTRY MONITOR — XAUUSD SELL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 Entry: SELL $4,070.00
-📍 Current: $4,053.35
-💰 P&L: +$16.65 (Profit)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚡ ACTION: HOLD PROFIT ✅
-📝 Running profit $16.65 — Hold ke TP
-
-🎯 TARGETS:
-• TP1: $4,040.00 (±$13)
-• TP2: $4,010.00 (±$43)
-• TP3: $3,990.00 (±$63)
-
-🛑 STOP LOSS: $4,085.00 (±$31)
-
-💡 Saran: Hold ke target atau trailing stop
-⏰ Update: 20:04:48
-```
+### Auto-Actions (Only when monitor ACTIVE):
+| Kondisi | Action |
+|:---|:---|
+| Price ≥ TP1 | CLOSE 50% alert |
+| Price ≥ TP2 | CLOSE 100% atau MOVE SL |
+| Price ≥ TP3 | CLOSE 100% |
+| Price dekat SL | WARNING |
+| Price di entry ±$2 | BREAKEVEN alert |
+| Default | HOLD |
 
 ## Output Formatting
 
@@ -127,24 +102,17 @@ Based on real-time price + technical levels:
 - Take profit targets
 - Risk:Reward ratio
 
-### Step 5: Monitor Entry (if active)
+### Step 5: Monitor Entry (ONLY if user has active entry)
 ```bash
 cd ~/.openclaw/workspace && python3 entry_monitor.py
 ```
 
 ## Files
 - `~/.openclaw/workspace/tradingview_cron.py` - Real-time price fetcher
-- `~/.openclaw/workspace/entry_monitor.py` - Entry monitor + auto-actions
-- `~/.openclaw/workspace/active_entry.json` - Active entry config
+- `~/.openclaw/workspace/entry_monitor.py` - Entry monitor (manual/on-demand)
+- `~/.openclaw/workspace/active_entry.json` - Active entry config (created per request)
 - `~/.openclaw/workspace/entry_status.json` - Monitor status output
 - `~/.openclaw/workspace/skills/tradingview-scraper/scripts/gold_master_analysis.py` - Full analysis
 
-## Cron Jobs
-
-### entry-monitor
-- Schedule: Setiap 1 menit
-- Action: Fetch price + Run monitor
-- Output: Entry status + Action alerts
-
 ## Version
-1.3.0
+1.3.1
